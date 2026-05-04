@@ -12,24 +12,32 @@
             <h3 class="mb-0">Novo Usuário</h3>
         </div>
         <div class="card-body">
-            <form th:action="@{/usuarios/novo}" method="post">
+            <!-- th:object vincula o formulário ao objeto que o Controller enviou -->
+            <form th:action="@{/usuarios/salvar}" th:object="${usuario}" method="post">
+
                 <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" required>
+                    <!-- th:field mapeia o input para o atributo 'username' do UsuarioModel -->
+                    <input type="text" th:field="*{username}" class="form-control" required>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Senha</label>
-                    <input type="password" name="password" class="form-control" required>
+                    <!-- th:field mapeia o input para o atributo 'password' -->
+                    <input type="password" th:field="*{password}" class="form-control" required>
                 </div>
+
                 <div class="mb-3">
                     <label class="form-label">Perfil de Acesso</label>
-                    <select name="role" class="form-select">
-                        <option value="USER">Usuário</option>
-                        <option value="ADMIN">Administrador</option>
+                    <!-- th:field mapeia o select para o atributo 'role' -->
+                    <select th:field="*{role}" class="form-select">
+                        <option value="ROLE_USER">Usuário Comum</option>
+                        <option value="ROLE_ADMIN">Administrador</option>
                     </select>
                 </div>
+
                 <button type="submit" class="btn btn-success w-100">Cadastrar</button>
-                <a href="/produtos" class="btn btn-link w-100 mt-2">Voltar</a>
+                <a th:href="@{/produtos}" class="btn btn-link w-100 mt-2">Voltar</a>
             </form>
         </div>
     </div>
