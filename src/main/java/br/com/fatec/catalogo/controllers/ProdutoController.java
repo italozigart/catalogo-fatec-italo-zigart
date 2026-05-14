@@ -17,23 +17,6 @@ public class ProdutoController {
     @Autowired
     private ProdutoService service;
 
-//    @GetMapping
-//    public String listar(Model model) {
-//        model.addAttribute("produtos", service.listarTodos());
-//        return "lista-produtos";
-//    }
-
-    // Resolve o Desafio 1
-//    @GetMapping
-//    public String listar(@RequestParam(value = "busca", required = false) String busca, Model model) {
-//        if (busca != null && !busca.isBlank()) {
-//            model.addAttribute("produtos", service.listarPorNome(busca));
-//        } else {
-//            model.addAttribute("produtos", service.listarTodos());
-//        }
-//        return "lista-produtos";
-//    }
-
     @GetMapping
     public String listar(@RequestParam(value = "nome", required = false) String nome,
                          @RequestParam(value = "categoriaId", required = false) Long categoriaId,
@@ -75,6 +58,7 @@ public class ProdutoController {
     @GetMapping("/editar/{id}")
     public String editar(@PathVariable long id, Model model) {
         model.addAttribute("produto", service.buscarPorId(id));
+        model.addAttribute("categorias", categoriaService.listarTodas());
         return "cadastro-produto"; // Reutilizamos o mesmo form para editar
     }
 

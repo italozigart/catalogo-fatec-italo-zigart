@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-//    @Autowired
-//    private InMemoryUserDetailsManager userManager;
     @Autowired
     private UsuarioService usuarioService; // Use o service que criptografa a senha
 
@@ -30,29 +28,6 @@ public class UsuarioController {
         model.addAttribute("usuario", new UsuarioModel());
         return "cadastro-usuario";
     }
-
-//    @GetMapping("/novo")
-//    public String exibirCadastro() {
-//        return "cadastro-usuario";
-//    }
-
-//    @PostMapping("/novo")
-//    public String cadastrarUsuario(@RequestParam String username,
-//                                   @RequestParam String password,
-//                                   @RequestParam String role) {
-//
-//        // Criando a definição do novo usuário
-//        UserDetails novoUsuario = User.builder()
-//                .username(username)
-//                .password("{noop}" + password) // Mantendo o padrão noop
-//                .roles(role)
-//                .build();
-//
-//        // Adicionando ao gerenciador de memória
-//        userManager.createUser(novoUsuario);
-//
-//        return "redirect:/produtos";
-//    }
 
     @PostMapping("/salvar")
     public String salvar(@Valid UsuarioModel usuario, BindingResult result) {

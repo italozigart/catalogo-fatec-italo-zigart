@@ -7,13 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-//public interface ProdutoRepository extends JpaRepository<ProdutoModel, Long> {
-//}
-
-// Resolve o Desafio 1
-//public interface ProdutoRepository extends JpaRepository<ProdutoModel, Long> {
-//    List<ProdutoModel> findByNomeContainingIgnoreCase(String nome);
-//}
 
 public interface ProdutoRepository extends JpaRepository<ProdutoModel, Long> {
     List<ProdutoModel> findByNomeContainingIgnoreCase(String nome);

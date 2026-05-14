@@ -104,7 +104,7 @@
                     <td th:text="${p.nome}"></td>
                     <td th:text="${p.categoria != null ? p.categoria.nome : 'Sem Categoria'}"></td>
                     <td th:text="${#numbers.formatDecimal(p.valor, 1, 'POINT', 2, 'COMMA')}"
-                        th:classappend="${p.valor > 1000} ? 'text-danger fw-bold' : ''">
+                        th:classappend="${p.valor > 10000} ? 'text-danger fw-bold' : ''">
                     </td>
                     <td class="text-center" sec:authorize="hasRole('ADMIN')">
                         <a th:href="@{/produtos/editar/{id}(id=${p.idProduto})}"

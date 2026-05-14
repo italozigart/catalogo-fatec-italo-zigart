@@ -34,7 +34,7 @@ public class ProdutoModel implements Serializable {
     private CategoriaModel categoria;
 
     //Resolve o Desafio 3
-    @Column(updatable = false)
+    @Column(name="data_atualizacao")
     private LocalDateTime dataCadastro;
 
     @PrePersist

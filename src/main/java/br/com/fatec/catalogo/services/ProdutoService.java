@@ -5,6 +5,8 @@ import br.com.fatec.catalogo.repositories.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,11 +33,6 @@ public class ProdutoService {
         return repository.findByCategoriaIdCategoria(idCategoria);
     }
 
-//    @Transactional
-//    public void salvar(ProdutoModel produto) {
-//        repository.save(produto);
-//    }
-
     // Resolve o Desafio 2
     @Transactional
     public void salvar(ProdutoModel produto) {
@@ -43,6 +40,10 @@ public class ProdutoService {
         if (produto.getIdProduto() == 0 && repository.existsByNome(produto.getNome())) {
             throw new RuntimeException("Já existe um produto com este nome.");
         }
+        // --- ATUALIZAÇÃO DA DATA ---
+        // Toda vez que salvar (seja novo ou edição), a data será o momento atual
+        produto.setDataCadastro(LocalDateTime.now());
+
         repository.save(produto);
     }
 
