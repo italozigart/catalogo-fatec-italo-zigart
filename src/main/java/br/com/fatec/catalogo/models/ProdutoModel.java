@@ -1,10 +1,7 @@
 package br.com.fatec.catalogo.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -32,6 +29,10 @@ public class ProdutoModel implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_categoria_fk")
     private CategoriaModel categoria;
+    //\\\\\\\\\**********adicionei a validação da quantidade aqui**********\\\\\\\\\\
+    @NotNull(message = "A quantidade é obrigatória.")
+    @Min(value = 0, message = "A quantidade não pode ser negativa.")
+    private Integer quantidade;
 
     //Resolve o Desafio 3
     @Column(name="data_atualizacao")
@@ -86,6 +87,12 @@ public class ProdutoModel implements Serializable {
     public void setCategoria(CategoriaModel categoria) {
         this.categoria = categoria;
     }
+    //\\\\\\\\\**********adicionei os get e set da quantidade do controle de estoque aqui**********\\\\\\\\\\
+    public Integer getQuantidade() {
+        return quantidade;
+    }
 
-
+    public void setQuantidade(Integer quantidade) {
+        this.quantidade = quantidade;
+    }
 }

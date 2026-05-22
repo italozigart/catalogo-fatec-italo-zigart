@@ -94,7 +94,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
-                    <th>Categoria</th> <th>Preço (R$)</th>
+                    <th>Categoria</th>
+                    <th>Preço (R$)</th>
+                    <th>Estoque</th>
                     <th class="text-center" sec:authorize="hasRole('ADMIN')">Ações</th>
                 </tr>
                 </thead>
@@ -106,6 +108,7 @@
                     <td th:text="${#numbers.formatDecimal(p.valor, 1, 'POINT', 2, 'COMMA')}"
                         th:classappend="${p.valor > 10000} ? 'text-danger fw-bold' : ''">
                     </td>
+                    <td th:text="${p.quantidade}"></td>
                     <td class="text-center" sec:authorize="hasRole('ADMIN')">
                         <a th:href="@{/produtos/editar/{id}(id=${p.idProduto})}"
                            class="btn btn-sm btn-warning">Editar</a>

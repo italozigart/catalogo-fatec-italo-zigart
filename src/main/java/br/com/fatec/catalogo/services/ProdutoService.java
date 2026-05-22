@@ -43,7 +43,12 @@ public class ProdutoService {
         // --- ATUALIZAÇÃO DA DATA ---
         // Toda vez que salvar (seja novo ou edição), a data será o momento atual
         produto.setDataCadastro(LocalDateTime.now());
+        //\\\\\\\\\\**********validação na camada de serviço adicionei aqui**********//////////
+        if (produto.getQuantidade() != null && produto.getQuantidade() < 0) {
+            throw new IllegalArgumentException("A quantidade não pode ser negativa.");
+        }
 
+        produto.setDataCadastro(LocalDateTime.now());
         repository.save(produto);
     }
 
