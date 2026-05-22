@@ -32,6 +32,10 @@ public class ProdutoService {
     public List<ProdutoModel> listarPorCategoria(Long idCategoria) {
         return repository.findByCategoriaIdCategoria(idCategoria);
     }
+    //\\\\\\\\\\**********metodo de listagem para auditoria adicionei aqui**********//////////
+    public List<ProdutoModel> listarParaAuditoria() {
+        return repository.findAllByOrderByDataCadastroDesc();
+    }
 
     // Resolve o Desafio 2
     @Transactional

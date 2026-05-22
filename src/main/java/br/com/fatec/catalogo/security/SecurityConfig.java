@@ -25,6 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/usuarios/**").hasRole("ADMIN") // Somente Admin cadastra novos usuários
                         .requestMatchers("/produtos").permitAll() // Público
                         .requestMatchers("/produtos/novo", "/produtos/editar/**", "/produtos/excluir/**").hasRole("ADMIN")
+                        .requestMatchers("/auditoria/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

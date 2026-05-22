@@ -29,6 +29,9 @@
                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                     <a class="nav-link" th:href="@{/usuarios/novo}">Novo usuário</a>
                 </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/auditoria}">Auditoria</a>
+                </li>
             </ul>
 
             <div class="d-flex align-items-center">

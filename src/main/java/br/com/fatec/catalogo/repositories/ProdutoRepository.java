@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface ProdutoRepository extends JpaRepository<ProdutoModel, Long> {
     List<ProdutoModel> findByNomeContainingIgnoreCase(String nome);
+    //\\\\\\\\\\**********novo metodo de ordenação adicionei aqui**********//////////
+    List<ProdutoModel> findAllByOrderByDataCadastroDesc();
     boolean existsByNome(String nome);
 
     List<ProdutoModel> findByCategoriaIdCategoria(Long idCategoria);
