@@ -120,7 +120,6 @@
                     <td class="text-center" sec:authorize="hasRole('ADMIN')">
                         <a th:href="@{/produtos/editar/{id}(id=${p.idProduto})}"
                            class="btn btn-sm btn-warning">Editar</a>
-
                         <a th:href="@{/produtos/excluir/{id}(id=${p.idProduto})}"
                            class="btn btn-sm btn-danger"
                            onclick="return confirm('Tem certeza que deseja remover este produto?')">Excluir</a>
