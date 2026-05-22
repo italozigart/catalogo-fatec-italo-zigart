@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/produtos")
@@ -44,14 +46,21 @@ public class ProdutoController {
         model.addAttribute("categorias", categoriaService.listarTodas()); // Garante que o select funcione
         return "cadastro-produto";
     }
-
+    //\\\\\\\\********modificações para o metodo de salvar imprimir alerts ao usuário**********//////////
     @PostMapping("/salvar")
     public String salvar(@Valid @ModelAttribute("produto") ProdutoModel produto,
-                         BindingResult result) {
+                         BindingResult result,
+                         RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "cadastro-produto";
         }
         service.salvar(produto);
+
+        String horario = produto.getDataCadastro()
+                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy 'às' HH:mm:ss"));
+        redirectAttributes.addFlashAttribute("mensagemSucesso",
+                "Produto salvo com sucesso! Última modificação: " + horario);
+
         return "redirect:/produtos";
     }
 
