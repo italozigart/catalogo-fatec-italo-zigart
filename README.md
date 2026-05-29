@@ -31,6 +31,79 @@ O projeto segue o padrão de responsabilidades separadas para garantir a manuten
 *   Controllers: Gerenciamento de rotas e fluxo entre a View e a Model.
 *   Config: Classes de configuração de segurança e inicialização do sistema.
 
+## Fluxo de Dados: Do Formulário HTML ao Banco de Dados
+
+Esta seção descreve o caminho percorrido pelos dados desde o momento em que o usuário preenche um formulário até a persistência no PostgreSQL, usando o cadastro de produto como exemplo.
+
+### 1. Formulário HTML (View — Thymeleaf)
+
+O formulário em `cadastro-produto.html` usa os atributos `th:object` e `th:field` para se vincular ao objeto `ProdutoModel` enviado pelo Controller:
+
+```html
+<form th:action="@{/produtos/salvar}" th:object="${produto}" method="post">
+    <input type="text"   th:field="*{nome}">
+    <input type="number" th:field="*{valor}">
+    <input type="number" th:field="*{quantidade}">
+    <select             th:field="*{categoria}">...</select>
+</form>
+```
+
+Ao clicar em "Salvar", o browser serializa os campos em uma requisição HTTP POST com os dados no corpo: `nome=Mouse+Gamer&valor=150.00&quantidade=10&categoria=1`.
+
+### 2. Controller (Recebe e valida o formulário)
+
+O `ProdutoController` recebe a requisição no método `salvar()`. A anotação `@ModelAttribute` instrui o Spring a mapear automaticamente cada campo do POST para o atributo correspondente do `ProdutoModel`. A anotação `@Valid` dispara as validações declaradas no Model (`@NotBlank`, `@NotNull`, `@Min`, `@Size`). Se houver erros, o `BindingResult` os captura e o formulário é reexibido com as mensagens de erro — sem chegar ao banco.
+
+```java
+@PostMapping("/salvar")
+public String salvar(@Valid @ModelAttribute("produto") ProdutoModel produto,
+                     BindingResult result, RedirectAttributes redirectAttributes) {
+    if (result.hasErrors()) return "cadastro-produto"; // Reexibe com erros
+    service.salvar(produto);
+    // ...
+    return "redirect:/produtos";
+}
+```
+
+### 3. Service (Aplica as regras de negócio)
+
+O `ProdutoService` recebe o objeto já populado e aplica as regras de negócio antes de persistir. Esta é a camada que protege a integridade dos dados independentemente de como a requisição chegou (formulário, API, etc.):
+
+```java
+public void salvar(ProdutoModel produto) {
+    if (produto.getIdProduto() == 0 && repository.existsByNome(produto.getNome())) {
+        throw new RuntimeException("Já existe um produto com este nome.");
+    }
+    if (produto.getQuantidade() != null && produto.getQuantidade() < 0) {
+        throw new IllegalArgumentException("A quantidade não pode ser negativa.");
+    }
+    produto.setDataCadastro(LocalDateTime.now());
+    repository.save(produto);
+}
+```
+
+### 4. Repository e Hibernate (Gera e executa o SQL)
+
+O `ProdutoRepository` recebe o objeto e o Hibernate gera automaticamente o SQL correspondente, mapeando cada atributo do `ProdutoModel` para a coluna definida em `TB_PRODUTO`:
+
+```sql
+INSERT INTO tb_produto (id_categoria_fk, data_atualizacao, nome, quantidade, valor)
+VALUES (1, '2026-05-21 22:12:26', 'Mouse Gamer', 10, 150.00)
+```
+
+### 5. Resumo do fluxo completo
+
+```
+[HTML form] --> POST /produtos/salvar
+    --> [Controller] @ModelAttribute monta o ProdutoModel
+        --> [Controller] @Valid dispara validações do Bean Validation
+            --> [Service] aplica regras de negócio
+                --> [Repository] Hibernate gera e executa o SQL
+                    --> [PostgreSQL] dado persistido em TB_PRODUTO
+                        --> [Controller] redirect:/produtos com mensagem de sucesso
+                            --> [HTML] alerta verde exibido ao usuário
+```
+
 ## Como Executar
 1. Certifique-se de ter o Java 21 e o PostgreSQL instalados.
 2. Clone o repositório.
